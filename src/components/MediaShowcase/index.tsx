@@ -1,23 +1,35 @@
+import Selector, { SelectorOptionType } from 'components/Selector'
+import api from 'helpers/api'
+import { useEffect, useState } from 'react'
 import * as S from './styles'
-
-export type Tab = {
-  title: string
-  url: string
-}
 
 export type Props = {
   title: string
-  tabs: Tab[]
+  selectorOptions: SelectorOptionType[]
 }
 
-const MediaShowcase = ({ title, tabs }: Props) => {
+const MediaShowcase = ({ title, selectorOptions }: Props) => {
+  const [selectedOption, setSelectedOption] = useState<SelectorOptionType>(
+    selectorOptions[0]
+  )
+
+  useEffect(() => {
+    api
+      .get(selectedOption.urlToGet)
+      .then(({ data }) => console.log(data.results))
+  }, [selectedOption])
+
   return (
     <S.Container>
       <S.Header>
-        <S.Title>{title}</S.Title>
-        <S.TabsWrapper>{tabs.map((tab) => tab.title)}</S.TabsWrapper>
+        <h2>{title}</h2>
+        <Selector
+          options={selectorOptions}
+          selectedOption={selectedOption}
+          setSelectedOption={setSelectedOption}
+        />
       </S.Header>
-      <S.Body>movies</S.Body>
+      <S.Body>movies to be added</S.Body>
     </S.Container>
   )
 }

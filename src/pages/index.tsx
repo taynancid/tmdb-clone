@@ -1,20 +1,19 @@
-import Link from 'next/link'
 import api from 'helpers/api'
+import MediaShowcase from 'components/MediaShowcase'
+import { useState } from 'react'
+import * as S from './styles'
+import { SelectorOptionType } from 'components/Selector'
 
-type Movie = {
-  id: number
+type Showcase = {
   title: string
-  poster_path: string
-}
-
-type HomeProps = {
-  trendingMovies: Movie[]
+  tabs: SelectorOptionType[]
 }
 
 export async function getStaticProps() {
   // Call an external API endpoint to get posts
-  const res = await api.get('/3/trending/movie/week')
+  const res = await api.get('/3/trending/tv/week')
   const { results: trendingMovies } = await res.data
+  console.log(trendingMovies)
 
   // By returning { props: { posts } }, the Blog component
   // will receive `posts` as a prop at build time
@@ -25,15 +24,29 @@ export async function getStaticProps() {
   }
 }
 
-export default function Home({ trendingMovies }: HomeProps) {
-  // useEffect(() => trendingMovies.map((movie) => console.log(movie.title)), [])
+export default function Home() {
+  const [trendingShowcase] = useState<Showcase>({
+    title: 'Trending',
+    tabs: [
+      {
+        title: 'Movies',
+        slug: 'movies',
+        urlToGet: '/3/trending/movie/week'
+      },
+      {
+        title: 'TV Shows',
+        slug: 'tv-show',
+        urlToGet: '/3/trending/tv/week'
+      }
+    ]
+  })
+
   return (
-    <div>
-      {trendingMovies.map((movie) => (
-        <Link key={movie.id} href={`/movie/${movie.id}`}>
-          <a>{movie.title}</a>
-        </Link>
-      ))}
-    </div>
+    <S.Container>
+      <MediaShowcase
+        title={trendingShowcase.title}
+        selectorOptions={trendingShowcase.tabs}
+      />
+    </S.Container>
   )
 }

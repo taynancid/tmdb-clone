@@ -6,5 +6,8 @@ module.exports = withPWA({
   pwa: {
     dest: 'public',
     disable: !isProd
+  },
+  env: {
+    movieApiKey: process.env.API_KEY
   }
 })
