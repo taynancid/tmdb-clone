@@ -17,13 +17,13 @@ const useSelector = () => {
     }
   }, [optionsWidth])
 
-  const onSetOptionWidth = useCallback((width: number, index: number) => {
+  const onSetOptionWidth = useCallback((width = 0, index = 0) => {
     setOptionsWidth((previousOptionsWidth) =>
       Object.assign([...previousOptionsWidth], { [index]: width })
     )
   }, [])
 
-  const handleSelectOption = useCallback(
+  const changeSelectedBackground = useCallback(
     (e: React.MouseEvent<HTMLDivElement>, index: number): void => {
       setHorizontalPosition(() => {
         if (index === 0) return 0
@@ -40,7 +40,7 @@ const useSelector = () => {
   )
 
   return {
-    handleSelectOption,
+    changeSelectedBackground,
     onSetOptionWidth,
     selectedWidth,
     horizontalPosition

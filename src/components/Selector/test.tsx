@@ -1,4 +1,4 @@
-import { render, screen } from '@testing-library/react'
+import { render, screen, fireEvent } from '@testing-library/react'
 
 import Selector from './index'
 
@@ -32,13 +32,17 @@ describe('<MediaShowcase />', () => {
         setSelectedOption={setSelectedOption}
       />
     )
-
-    screen.getByRole('heading', {
+    const movieSelector = screen.getByRole('heading', {
       name: /movies/i
     })
 
-    screen.getByRole('heading', {
+    const tvShowsSelector = screen.getByRole('heading', {
       name: /tv shows/i
     })
+
+    fireEvent.click(tvShowsSelector)
+    expect(setSelectedOption).toHaveBeenCalled()
+    fireEvent.click(movieSelector)
+    expect(setSelectedOption).toHaveBeenCalled()
   })
 })

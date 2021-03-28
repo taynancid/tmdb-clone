@@ -17,7 +17,7 @@ type Props = {
 
 const Selector = ({ options, selectedOption, setSelectedOption }: Props) => {
   const {
-    handleSelectOption,
+    changeSelectedBackground,
     onSetOptionWidth,
     selectedWidth,
     horizontalPosition
@@ -35,7 +35,7 @@ const Selector = ({ options, selectedOption, setSelectedOption }: Props) => {
           key={option.slug}
           isSelected={option.slug === selectedOption?.slug}
           onClicked={(e: React.MouseEvent<HTMLDivElement>) => {
-            handleSelectOption(e, index)
+            changeSelectedBackground(e, index)
             setSelectedOption(option)
           }}
           name={option.title}
@@ -44,7 +44,7 @@ const Selector = ({ options, selectedOption, setSelectedOption }: Props) => {
         />
       ))}
       <S.SelectedBackground
-        width={selectedWidth}
+        width={selectedWidth ? selectedWidth + 1 : 0}
         horizontalPosition={horizontalPosition}
       />
     </S.Container>
