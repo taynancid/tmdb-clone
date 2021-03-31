@@ -1,32 +1,36 @@
 import Selector, { SelectorOptionType } from 'components/Selector'
-import { useState } from 'react'
+import api from '../../helpers/api'
+import { useState, useEffect } from 'react'
 import * as S from './styles'
 import MediaPreview from '../MediaPreview'
 import ShimmerCard from 'components/ShimmerCard'
 
-const mockMediaList = [
-  {
-    id: 1,
-    title: 'Justice League',
-    poster_path: '/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg',
-    vote_average: 8.8,
-    release_date: '2021-03-18'
-  },
-  {
-    id: 2,
-    title: 'Raya and the Last Dragon',
-    poster_path: '/lPsD10PP4rgUGiGR4CCXA6iY0QQ.jpg',
-    vote_average: 8.4,
-    release_date: '2021-03-03'
-  },
-  {
-    id: 3,
-    title: 'Coming 2 America',
-    poster_path: '/nWBPLkqNApY5pgrJFMiI9joSI30.jpg',
-    vote_average: 6.9,
-    release_date: '2021-03-05'
-  }
-]
+// const mockMediaList = [
+//   {
+//     id: 1,
+//     title: 'Justice League',
+//     poster_path: '/tnAuB8q5vv7Ax9UAEje5Xi4BXik.jpg',
+//     vote_average: 8.8,
+//     release_date: '2021-03-18',
+//     media_type: 'movie'
+//   },
+//   {
+//     id: 2,
+//     title: 'Raya and the Last Dragon',
+//     poster_path: '/lPsD10PP4rgUGiGR4CCXA6iY0QQ.jpg',
+//     vote_average: 8.4,
+//     release_date: '2021-03-03',
+//     media_type: 'movie'
+//   },
+//   {
+//     id: 3,
+//     title: 'Coming 2 America',
+//     poster_path: '/nWBPLkqNApY5pgrJFMiI9joSI30.jpg',
+//     vote_average: 6.9,
+//     release_date: '2021-03-05',
+//     media_type: 'movie'
+//   }
+// ]
 
 export type Props = {
   title: string
@@ -36,9 +40,12 @@ export type Props = {
 export type MediaPreview = {
   id: number
   title: string
+  original_name: string
   vote_average: number
   release_date: string
+  first_air_date: string
   poster_path: string
+  media_type: 'tv' | 'movie'
 }
 
 // const imgPath = 'https://image.tmdb.org/t/p/w500/'
@@ -49,18 +56,20 @@ const MediaShowcase = ({ title, selectorOptions }: Props) => {
   const [selectedOption, setSelectedOption] = useState<SelectorOptionType>(
     selectorOptions[0]
   )
-  const [mediaList] = useState<MediaPreview[]>(mockMediaList)
-  const [isFetching] = useState<boolean>(true)
+  const [mediaList, setMediaList] = useState<MediaPreview[]>([])
+  const [isFetching, setIsFetching] = useState<boolean>(true)
 
-  // useEffect(() => {
-  //   console.log(mediaList)
-  // }, [mediaList])
+  useEffect(() => {
+    console.log(mediaList)
+  }, [mediaList])
 
-  // useEffect(() => {
-  //   api
-  //     .get(selectedOption.urlToGet)
-  //     .then(({ data }) => setMediaList(data.results))
-  // }, [selectedOption])
+  useEffect(() => {
+    setIsFetching(true)
+    api
+      .get(selectedOption.urlToGet)
+      .then(({ data }) => setMediaList(data.results))
+      .finally(() => setIsFetching(false))
+  }, [selectedOption])
 
   return (
     <S.Container>
@@ -79,8 +88,10 @@ const MediaShowcase = ({ title, selectorOptions }: Props) => {
               index={index}
               key={media.id}
               id={media.id}
-              title={media.title}
-              releaseDate={media.release_date}
+              title={media.title ? media.title : media.original_name}
+              releaseDate={
+                media.release_date ? media.release_date : media.first_air_date
+              }
               posterPath={media.poster_path}
               voteAverage={media.vote_average}
             />

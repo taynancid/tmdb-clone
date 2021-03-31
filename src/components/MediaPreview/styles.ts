@@ -17,6 +17,9 @@ export const Container = styled.div<ContainerProps>`
   }
 
   .info {
+    display: flex;
+    flex-direction: column;
+    white-space: normal;
     padding: 0px 10px;
     width: 150px;
     .title {

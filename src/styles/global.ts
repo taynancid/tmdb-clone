@@ -10,6 +10,8 @@ const GlobalStyles = createGlobalStyle`
     --green: #1ed5a9;
     --shimmer-card-bg-color: #f6f7f8;
     --shimmer-card-moving-gradient: linear-gradient(to right, rgb(238, 238, 238) 8%, rgb(222, 222, 222) 18%,  rgb(238, 238, 238) 33%);
+    --lightGreen: 30,213,169;
+    --lightBlue: 1,180,228;
 
     --container: 100rem;
     --small: 1.5rem;
